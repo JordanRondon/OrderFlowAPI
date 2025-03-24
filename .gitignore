@@ -25,6 +25,7 @@ target/
 *.zip
 *.tar.gz
 *.rar
+.env
 
 ### STS ###
 .apt_generated
