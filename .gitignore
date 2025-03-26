@@ -25,6 +25,7 @@ target/
 *.zip
 *.tar.gz
 *.rar
+.env
 
 ### STS ###
 .apt_generated
@@ -53,11 +54,6 @@ build/
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
