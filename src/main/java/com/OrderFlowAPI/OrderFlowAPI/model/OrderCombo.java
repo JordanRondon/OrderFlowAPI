@@ -1,7 +1,26 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+
 public class OrderCombo {
+    @EmbeddedId
+    private OrderComboId id;
+
+    @ManyToOne
+    @MapsId("orderId")
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
+    @MapsId("comboId")
+    @JoinColumn(name = "combo_id")
     private Combo combo;
+
+    @Column(name = "requested_amount")
     private int requestedAmount;
 
     public OrderCombo() {
