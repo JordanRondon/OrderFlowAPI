@@ -3,22 +3,56 @@ package com.OrderFlowAPI.OrderFlowAPI.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "order")
 public class Order {
+    @Id
+    @Column(name = "order_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User employee;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
     private OrderStatus status;
+
+    @Column(name = "client_name", nullable = false, length = 30)
     private String clientName;
+
+    @Column(name = "table_number", nullable = true)
     private int tableNumber;
+
+    @Column(name = "total_amount", nullable = false)
     private double totalAmount;
+
+    @Column(name = "registration_date", nullable = false)
     private LocalDateTime date;
-    private List<OrderPorduct> products;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderProduct> products;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderCombo> combos;
 
     public Order() {
     }
 
     public Order(int orderId, User employee, OrderStatus status, String clientName, int tableNumber, double totalAmount,
-            LocalDateTime date, List<OrderPorduct> products, List<OrderCombo> combos) {
+            LocalDateTime date, List<OrderProduct> products, List<OrderCombo> combos) {
         this.orderId = orderId;
         this.employee = employee;
         this.status = status;
@@ -86,15 +120,15 @@ public class Order {
         this.date = date;
     }
 
-    public List<OrderPorduct> getProducts() {
+    public List<OrderProduct> getProducts() {
         return this.products;
     }
 
-    public void setProducts(List<OrderPorduct> products) {
+    public void setProducts(List<OrderProduct> products) {
         this.products = products;
     }
 
-    public void addProduct(OrderPorduct orderPorduct) {
+    public void addProduct(OrderProduct orderPorduct) {
         this.products.add(orderPorduct);
     }
 
