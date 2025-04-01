@@ -1,16 +1,18 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class OrderPorductId {
+public class OrderProductId implements Serializable {
     private int orderId;
     private int productId;
 
-    public OrderPorductId() {
+    public OrderProductId() {
     }
 
-    public OrderPorductId(int orderId, int productId) {
+    public OrderProductId(int orderId, int productId) {
         this.orderId = orderId;
         this.productId = productId;
     }

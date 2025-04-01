@@ -2,17 +2,21 @@ package com.OrderFlowAPI.OrderFlowAPI.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
 
-public class OrderPorduct {
+@Entity
+@Table(name = "orders_product")
+public class OrderProduct {
     @EmbeddedId
-    private OrderPorductId id;
+    private OrderProductId id;
 
     @ManyToOne
     @MapsId("orderId")
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     private Order order;
 
     @ManyToOne
@@ -23,10 +27,10 @@ public class OrderPorduct {
     @Column(name = "requested_amount")
     private int requestedAmount;
 
-    public OrderPorduct() {
+    public OrderProduct() {
     }
 
-    public OrderPorduct(Product product, int requestedAmount) {
+    public OrderProduct(Product product, int requestedAmount) {
         this.product = product;
         this.requestedAmount = requestedAmount;
     }
