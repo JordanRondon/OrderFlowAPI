@@ -15,10 +15,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
     @Id
-    @Column(name = "order_id")
+    @Column(name = "orders_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 

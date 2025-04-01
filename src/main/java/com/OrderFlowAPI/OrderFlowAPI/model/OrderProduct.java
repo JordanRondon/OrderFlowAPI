@@ -9,14 +9,14 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "order_product")
+@Table(name = "orders_product")
 public class OrderProduct {
     @EmbeddedId
     private OrderProductId id;
 
     @ManyToOne
     @MapsId("orderId")
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     private Order order;
 
     @ManyToOne
