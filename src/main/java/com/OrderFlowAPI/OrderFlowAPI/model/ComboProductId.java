@@ -1,9 +1,11 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class ComboProductId {
+public class ComboProductId implements Serializable {
     private int comboId;
     private int productId;
 
