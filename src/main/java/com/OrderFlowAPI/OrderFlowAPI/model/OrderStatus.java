@@ -6,7 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "order_status")
 public class OrderStatus {
@@ -18,27 +24,7 @@ public class OrderStatus {
     @Column(name = "status_name", nullable = false, length = 30)
     private String name;
 
-    public OrderStatus() {
-    }
-
-    public OrderStatus(int statusId, String name) {
-        this.statusId = statusId;
-        this.name = name;
-    }
-
-    public int getStatusId() {
-        return this.statusId;
-    }
-
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
+    public OrderStatus(String name) {
         this.name = name;
     }
 }

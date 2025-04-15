@@ -6,7 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "user_role")
 public class Role {
@@ -18,27 +24,7 @@ public class Role {
     @Column(name = "role_name", nullable = false, length = 30)
     private String name;
 
-    public Role() {
-    }
-
-    public Role(int roleId, String name) {
-        this.roleId = roleId;
-        this.name = name;
-    }
-
-    public int getRoleId() {
-        return this.roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
+    public Role(String name) {
         this.name = name;
     }
 }

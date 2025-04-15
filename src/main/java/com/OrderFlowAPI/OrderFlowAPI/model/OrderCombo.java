@@ -7,7 +7,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "orders_combo")
 public class OrderCombo {
@@ -27,27 +33,9 @@ public class OrderCombo {
     @Column(name = "requested_amount")
     private int requestedAmount;
 
-    public OrderCombo() {
-    }
-
-    public OrderCombo(Combo combo, int requestedAmount) {
+    public OrderCombo(Order order, Combo combo, int requestedAmount) {
+        this.order = order;
         this.combo = combo;
-        this.requestedAmount = requestedAmount;
-    }
-
-    public Combo getCombo() {
-        return this.combo;
-    }
-
-    public void setCombo(Combo combo) {
-        this.combo = combo;
-    }
-
-    public int getRequestedAmount() {
-        return this.requestedAmount;
-    }
-
-    public void setRequestedAmount(int requestedAmount) {
         this.requestedAmount = requestedAmount;
     }
 }

@@ -7,7 +7,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "orders_product")
 public class OrderProduct {
@@ -27,27 +33,9 @@ public class OrderProduct {
     @Column(name = "requested_amount")
     private int requestedAmount;
 
-    public OrderProduct() {
-    }
-
-    public OrderProduct(Product product, int requestedAmount) {
+    public OrderProduct(Order order, Product product, int requestedAmount) {
+        this.order = order;
         this.product = product;
-        this.requestedAmount = requestedAmount;
-    }
-
-    public Product getProduct() {
-        return this.product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getRequestedAmount() {
-        return this.requestedAmount;
-    }
-
-    public void setRequestedAmount(int requestedAmount) {
         this.requestedAmount = requestedAmount;
     }
 }

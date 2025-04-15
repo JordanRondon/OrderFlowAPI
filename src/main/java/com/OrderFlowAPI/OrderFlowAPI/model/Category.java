@@ -11,7 +11,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category {
@@ -26,35 +32,7 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
 
-    public Category() {
-    }
-
-    public Category(int categoryId, String name) {
-        this.categoryId = categoryId;
+    public Category(String name) {
         this.name = name;
-    }
-
-    public int getCategoryId() {
-        return this.categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Product> getProduts() {
-        return this.products;
-    }
-
-    public void setProduts(List<Product> products) {
-        this.products = products;
     }
 }

@@ -1,6 +1,8 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -13,7 +15,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -34,7 +42,7 @@ public class Order {
     private String clientName;
 
     @Column(name = "table_number", nullable = true)
-    private int tableNumber;
+    private Integer tableNumber;
 
     @Column(name = "total_amount", nullable = false)
     private double totalAmount;
@@ -42,113 +50,19 @@ public class Order {
     @Column(name = "registration_date", nullable = false)
     private LocalDateTime date;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderProduct> products;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProduct> products = new ArrayList<OrderProduct>();
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderCombo> combos;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderCombo> combos = new ArrayList<OrderCombo>();
 
-    public Order() {
-    }
-
-    public Order(int orderId, User employee, OrderStatus status, String clientName, int tableNumber, double totalAmount,
-            LocalDateTime date, List<OrderProduct> products, List<OrderCombo> combos) {
-        this.orderId = orderId;
+    public Order(User employee, OrderStatus status, String clientName, Integer tableNumber,
+            double totalAmount, LocalDateTime date) {
         this.employee = employee;
         this.status = status;
         this.clientName = clientName;
         this.tableNumber = tableNumber;
         this.totalAmount = totalAmount;
         this.date = date;
-        this.products = products;
-        this.combos = combos;
-    }
-
-    public int getOrderId() {
-        return this.orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public User getEmployee() {
-        return this.employee;
-    }
-
-    public void setEmployee(User employee) {
-        this.employee = employee;
-    }
-
-    public OrderStatus getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public String getClientName() {
-        return this.clientName;
-    }
-
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
-    public int getTableNumber() {
-        return this.tableNumber;
-    }
-
-    public void setTableNumber(int tableNumber) {
-        this.tableNumber = tableNumber;
-    }
-
-    public double getTotalAmount() {
-        return this.totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public LocalDateTime getDate() {
-        return this.date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public List<OrderProduct> getProducts() {
-        return this.products;
-    }
-
-    public void setProducts(List<OrderProduct> products) {
-        this.products = products;
-    }
-
-    public void addProduct(OrderProduct orderPorduct) {
-        this.products.add(orderPorduct);
-    }
-
-    public void removeProduct(int productId) {
-        this.products.remove(productId);
-    }
-
-    public List<OrderCombo> getCombos() {
-        return this.combos;
-    }
-
-    public void setCombos(List<OrderCombo> combos) {
-        this.combos = combos;
-    }
-
-    public void addCombo(OrderCombo orderCombo) {
-        this.combos.add(orderCombo);
-    }
-
-    public void removeCombo(int comboId) {
-        this.combos.remove(comboId);
     }
 }
