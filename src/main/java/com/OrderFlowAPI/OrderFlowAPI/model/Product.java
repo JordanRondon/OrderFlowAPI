@@ -1,5 +1,7 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "product")
 public class Product {
@@ -24,7 +32,7 @@ public class Product {
     private double price;
 
     @Column(name = "number_of_requests", nullable = false)
-    private int numberOfRequests;
+    private int numberOfRequests = 0;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -34,63 +42,10 @@ public class Product {
     @JoinColumn(name = "status_id")
     private ProductStatus status;
 
-    public Product() {
-    }
-
-    public Product(int productId, Category category, ProductStatus status, String name, double price) {
-        this.productId = productId;
-        this.category = category;
-        this.status = status;
+    public Product(String name, double price, Category category, ProductStatus status) {
         this.name = name;
         this.price = price;
-        this.numberOfRequests = 0;
-    }
-
-    public int getProductId() {
-        return this.productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public Category getCategory() {
-        return this.category;
-    }
-
-    public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public ProductStatus getProductStatus() {
-        return this.status;
-    }
-
-    public void setProductStatus(ProductStatus status) {
         this.status = status;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getNumberOfRequests() {
-        return this.numberOfRequests;
-    }
-
-    public void setNumberOfRequests(int numberOfRequests) {
-        this.numberOfRequests = numberOfRequests;
     }
 }

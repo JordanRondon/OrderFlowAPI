@@ -7,7 +7,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "combo_product")
 public class ComboProduct {
@@ -27,37 +33,9 @@ public class ComboProduct {
     @Column(name = "amount")
     private int amount;
 
-    public ComboProduct() {
-    }
-
     public ComboProduct(Combo combo, Product product, int amount) {
         this.combo = combo;
         this.product = product;
         this.amount = amount;
     }
-
-    public Combo getCombo() {
-        return this.combo;
-    }
-
-    public void setCombo(Combo combo) {
-        this.combo = combo;
-    }
-
-    public Product getProduct() {
-        return this.product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getAmount() {
-        return this.amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
 }
