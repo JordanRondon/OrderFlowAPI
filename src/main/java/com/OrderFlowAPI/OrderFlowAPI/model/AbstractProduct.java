@@ -1,9 +1,8 @@
 package com.OrderFlowAPI.OrderFlowAPI.model;
 
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class AbstractProduct {
-    @Column(name = "name", nullable = false, length = 30)
+    @Column(name = "item_name", nullable = false, length = 30)
     private String name;
 
     @Column(name = "price", nullable = false)
@@ -23,7 +22,7 @@ public abstract class AbstractProduct {
     @Column(name = "number_of_requests", nullable = false)
     private int numberOfRequests = 0;
 
-    @ManyToAny
+    @ManyToOne
     @JoinColumn(name = "status_id")
     private ProductStatus status;
 
