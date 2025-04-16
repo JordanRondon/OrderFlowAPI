@@ -27,9 +27,9 @@ public abstract class AbstractProduct {
     @JoinColumn(name = "status_id")
     private ProductStatus status;
 
-    public AbstractProduct(String name, double price, int numberOfRequests) {
+    public AbstractProduct(String name, double price, ProductStatus status) {
         this.name = name;
         this.price = price;
-        this.numberOfRequests = numberOfRequests;
+        this.status = status;
     }
 }
