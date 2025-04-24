@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.OrderFlowAPI.OrderFlowAPI.model.User;
+import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
 import com.OrderFlowAPI.OrderFlowAPI.service.IUserService;
 
 @RestController
@@ -22,12 +22,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    private ResponseEntity<User> getUserById(@PathVariable int userId) {
+    private ResponseEntity<UserDto> getUserById(@PathVariable int userId) {
         try {
-            User user = iUserService.getUserById(userId);
+            UserDto userDto = iUserService.getUserById(userId);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(user);
+                    .body(userDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
