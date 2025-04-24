@@ -1,7 +1,7 @@
 package com.OrderFlowAPI.OrderFlowAPI.service;
 
-import com.OrderFlowAPI.OrderFlowAPI.model.User;
+import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
 
 public interface IUserService {
-    public User getUserById(int userId);
+    public UserDto getUserById(int userId);
 }
