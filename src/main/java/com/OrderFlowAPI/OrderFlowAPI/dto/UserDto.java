@@ -1,0 +1,20 @@
+package com.OrderFlowAPI.OrderFlowAPI.dto;
+
+import com.OrderFlowAPI.OrderFlowAPI.model.Role;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto {
+    private int userId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Role role;
+}
