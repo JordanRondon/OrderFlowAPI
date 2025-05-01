@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,22 @@ public class UserController {
     private ResponseEntity<UserDto> getUserById(@PathVariable int userId) {
         try {
             UserDto userDto = iUserService.getUserById(userId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PostMapping("/ejemplo")
+    private ResponseEntity<?> ejemplo(@RequestBody UserDto userDto) {
+        try {
+            System.out.println("id: " + userDto.getUserId());
+            System.out.println("nombre: " + userDto.getFirstName());
+            System.out.println("apellido: " + userDto.getLastName());
+            System.out.println("email: " + userDto.getEmail());
+            System.out.println("role: " + userDto.getRole().getRoleId());
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userDto);
