@@ -39,7 +39,7 @@ public class JwtUtil {
                 .setHeader(headers)
                 .setSubject(userDto.getEmail())
                 .claim("id", userDto.getUserId())
-                .claim("role", userDto.getRole())
+                .claim("role", userDto.getRoleDto().getName())
                 .setIssuedAt(new Date())
                 // Set the expiration date (6 hours)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
