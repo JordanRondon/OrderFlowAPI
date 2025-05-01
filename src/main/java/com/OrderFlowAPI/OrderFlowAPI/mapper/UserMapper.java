@@ -7,14 +7,14 @@ import com.OrderFlowAPI.OrderFlowAPI.model.User;
 
 public class UserMapper {
     public static UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(user.getUserId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
         RoleDto roleDto = RoleMapper.toDto(user.getRole());
-        userDto.setRoleDto(roleDto);
-        return userDto;
+        return UserDto.builder()
+                .userId(user.getUserId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .roleDto(roleDto)
+                .build();
     }
 
     public static User toEntity(UserDto userDto) {
