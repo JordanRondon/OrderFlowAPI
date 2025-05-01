@@ -5,10 +5,10 @@ import com.OrderFlowAPI.OrderFlowAPI.model.Role;
 
 public class RoleMapper {
     public static RoleDto toDto(Role role) {
-        RoleDto roleDto = new RoleDto();
-        roleDto.setRoleId(role.getRoleId());
-        roleDto.setName(role.getName());
-        return roleDto;
+        return RoleDto.builder()
+                .roleId(role.getRoleId())
+                .name(role.getName())
+                .build();
     }
 
     public static Role toEntity(RoleDto roleDto) {
