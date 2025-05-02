@@ -3,6 +3,8 @@ package com.OrderFlowAPI.OrderFlowAPI.service.classes;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.OrderFlowAPI.OrderFlowAPI.dto.LoginRequestDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.LoginResponseDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.RegisterRequestDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.RoleDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
@@ -12,6 +14,7 @@ import com.OrderFlowAPI.OrderFlowAPI.model.User;
 import com.OrderFlowAPI.OrderFlowAPI.repository.IUserRepository;
 import com.OrderFlowAPI.OrderFlowAPI.service.IRoleService;
 import com.OrderFlowAPI.OrderFlowAPI.service.IUserService;
+import com.OrderFlowAPI.OrderFlowAPI.util.JwtUtil;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -19,13 +22,15 @@ import jakarta.persistence.EntityNotFoundException;
 public class UserService implements IUserService {
 
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
     private final IUserRepository iUserRepository;
     private final IRoleService iRoleService;
 
     // injection by builder
-    public UserService(PasswordEncoder passwordEncoder, IUserRepository iUserRepository,
-            IRoleService iRoleService) {
+    public UserService(PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
+            IUserRepository iUserRepository, IRoleService iRoleService) {
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
         this.iUserRepository = iUserRepository;
         this.iRoleService = iRoleService;
     }
@@ -50,6 +55,26 @@ public class UserService implements IUserService {
         user.setRole(RoleMapper.toEntity(roleDto));
 
         iUserRepository.save(user);
+    }
+
+    @Override
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+        if (loginRequestDto.getEmail() == null || loginRequestDto.getPassword() == null) {
+            throw new IllegalArgumentException("Email and password are required");
+        }
+
+        if (!iUserRepository.existsByEmail(loginRequestDto.getEmail())) {
+            throw new RuntimeException("non-existent email");
+        }
+
+        User user = iUserRepository.findByEmail(loginRequestDto.getEmail());
+
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        UserDto userDto = UserMapper.toDto(user);
+        return new LoginResponseDto(jwtUtil.generateJWT(userDto));
     }
 
     @Override
