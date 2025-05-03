@@ -35,11 +35,11 @@ public class JwtUtil {
         headers.put("alg", "HS256");
         headers.put("typ", "JWT");
 
-        return "Bearer " + Jwts.builder()
+        return Jwts.builder()
                 .setHeader(headers)
                 .setSubject(userDto.getEmail())
                 .claim("id", userDto.getUserId())
-                .claim("role", userDto.getRoleDto().getName())
+                .claim("role", userDto.getRoleDto().getName().toUpperCase())
                 .setIssuedAt(new Date())
                 // Set the expiration date (6 hours)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
