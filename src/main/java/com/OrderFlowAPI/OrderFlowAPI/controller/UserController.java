@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
 import com.OrderFlowAPI.OrderFlowAPI.service.IUserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -21,6 +24,7 @@ public class UserController {
         this.iUserService = iUserService;
     }
 
+    @Operation(summary = "Get user by id", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{userId}")
     private ResponseEntity<UserDto> getUserById(@PathVariable int userId) {
         try {

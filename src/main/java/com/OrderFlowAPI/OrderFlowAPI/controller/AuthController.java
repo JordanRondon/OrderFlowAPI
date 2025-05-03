@@ -14,6 +14,9 @@ import com.OrderFlowAPI.OrderFlowAPI.dto.LoginResponseDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.RegisterRequestDto;
 import com.OrderFlowAPI.OrderFlowAPI.service.IUserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -25,6 +28,7 @@ public class AuthController {
         this.iUserService = iUserService;
     }
 
+    @Operation(summary = "Register", security = @SecurityRequirement(name = "none"))
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDto registerRequestDto) {
         try {
@@ -38,6 +42,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Login", security = @SecurityRequirement(name = "none"))
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {
