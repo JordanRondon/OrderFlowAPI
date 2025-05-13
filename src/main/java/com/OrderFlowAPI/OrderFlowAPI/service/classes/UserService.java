@@ -1,13 +1,16 @@
 package com.OrderFlowAPI.OrderFlowAPI.service.classes;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.OrderFlowAPI.OrderFlowAPI.dto.LoginRequestDto;
-import com.OrderFlowAPI.OrderFlowAPI.dto.LoginResponseDto;
-import com.OrderFlowAPI.OrderFlowAPI.dto.RegisterRequestDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.RoleDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.request.LoginRequestDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.request.RegisterRequestDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.response.LoginResponseDto;
+import com.OrderFlowAPI.OrderFlowAPI.exception.BusinessException;
+import com.OrderFlowAPI.OrderFlowAPI.exception.ErrorCode;
 import com.OrderFlowAPI.OrderFlowAPI.mapper.RoleMapper;
 import com.OrderFlowAPI.OrderFlowAPI.mapper.UserMapper;
 import com.OrderFlowAPI.OrderFlowAPI.model.User;
@@ -15,8 +18,6 @@ import com.OrderFlowAPI.OrderFlowAPI.repository.IUserRepository;
 import com.OrderFlowAPI.OrderFlowAPI.service.IRoleService;
 import com.OrderFlowAPI.OrderFlowAPI.service.IUserService;
 import com.OrderFlowAPI.OrderFlowAPI.util.JwtUtil;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService implements IUserService {
@@ -37,40 +38,35 @@ public class UserService implements IUserService {
 
     @Override
     public void register(RegisterRequestDto registerRequestDto) {
-        if (registerRequestDto.getEmail() == null || registerRequestDto.getPassword() == null) {
-            throw new IllegalArgumentException("Email and password are required");
-        }
-
         if (iUserRepository.existsByEmail(registerRequestDto.getEmail())) {
-            throw new RuntimeException("Existing email");
+            throw new BusinessException("Existing email",
+                    ErrorCode.AUTH_EMAIL_ALREADY_EXISTS,
+                    HttpStatus.CONFLICT);
         }
 
         RoleDto roleDto = iRoleService.findById(registerRequestDto.getRoleId());
 
-        User user = new User();
-        user.setFirstName(registerRequestDto.getFirstName());
-        user.setLastName(registerRequestDto.getLastName());
-        user.setEmail(registerRequestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
-        user.setRole(RoleMapper.toEntity(roleDto));
+        User user = new User(
+                registerRequestDto.getFirstName(),
+                registerRequestDto.getLastName(),
+                registerRequestDto.getEmail(),
+                passwordEncoder.encode(registerRequestDto.getPassword()),
+                RoleMapper.toEntity(roleDto));
 
         iUserRepository.save(user);
     }
 
     @Override
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        if (loginRequestDto.getEmail() == null || loginRequestDto.getPassword() == null) {
-            throw new IllegalArgumentException("Email and password are required");
-        }
-
-        if (!iUserRepository.existsByEmail(loginRequestDto.getEmail())) {
-            throw new RuntimeException("non-existent email");
-        }
-
-        User user = iUserRepository.findByEmail(loginRequestDto.getEmail());
+        User user = iUserRepository.findByEmail(loginRequestDto.getEmail())
+                .orElseThrow(() -> new BusinessException("unregistered email: " + loginRequestDto.getEmail(),
+                        ErrorCode.AUTH_EMAIL_NOT_FOUND,
+                        HttpStatus.UNAUTHORIZED));
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Incorrect password");
+            throw new BusinessException("Incorrect password",
+                    ErrorCode.AUTH_PASSWORD_MISMATCH,
+                    HttpStatus.UNAUTHORIZED);
         }
 
         UserDto userDto = UserMapper.toDto(user);
@@ -80,7 +76,9 @@ public class UserService implements IUserService {
     @Override
     public UserDto getUserById(int userId) {
         User user = iUserRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + userId));
+                .orElseThrow(() -> new BusinessException("User not found with ID: " + userId,
+                        ErrorCode.USER_NOT_FOUND,
+                        HttpStatus.NOT_FOUND));
         return UserMapper.toDto(user);
     }
 
