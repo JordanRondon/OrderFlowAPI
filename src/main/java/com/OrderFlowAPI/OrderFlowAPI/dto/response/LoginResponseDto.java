@@ -1,4 +1,4 @@
-package com.OrderFlowAPI.OrderFlowAPI.dto;
+package com.OrderFlowAPI.OrderFlowAPI.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDto {
-    private String email;
-    private String password;
+public class LoginResponseDto {
+    private String token;
 }
