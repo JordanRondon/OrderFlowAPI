@@ -21,7 +21,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private Integer userId;
 
     @Column(name = "first_name", nullable = false, length = 30)
     private String firstName;
@@ -39,7 +39,8 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
+    public User(Integer userId, String firstName, String lastName, String email, String password, Role role) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

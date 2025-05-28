@@ -19,7 +19,7 @@ public class Product extends AbstractProduct {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Integer productId;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -29,9 +29,10 @@ public class Product extends AbstractProduct {
         super();
     }
 
-    public Product(String name, double price, ProductStatus status,
+    public Product(Integer productId, String name, double price, ProductStatus status,
             Category category) {
         super(name, price, status);
+        this.productId = productId;
         this.category = category;
     }
 }

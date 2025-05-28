@@ -27,7 +27,7 @@ public class Order {
     @Id
     @Column(name = "orders_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private Integer orderId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -55,8 +55,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderCombo> combos = new ArrayList<OrderCombo>();
 
-    public Order(User employee, OrderStatus status, String clientName, Integer tableNumber,
+    public Order(Integer orderId, User employee, OrderStatus status, String clientName, Integer tableNumber,
             double totalAmount, LocalDateTime date) {
+        this.orderId = orderId;
         this.employee = employee;
         this.status = status;
         this.clientName = clientName;

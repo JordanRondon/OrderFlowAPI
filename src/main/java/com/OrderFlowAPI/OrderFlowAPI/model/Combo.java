@@ -22,7 +22,7 @@ public class Combo extends AbstractProduct {
     @Id
     @Column(name = "combo_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int comboId;
+    private Integer comboId;
 
     @OneToMany(mappedBy = "combo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComboProduct> products = new ArrayList<ComboProduct>();
@@ -31,7 +31,8 @@ public class Combo extends AbstractProduct {
         super();
     }
 
-    public Combo(String name, double price, ProductStatus status) {
+    public Combo(Integer comboId, String name, double price, ProductStatus status) {
         super(name, price, status);
+        this.comboId = comboId;
     }
 }
