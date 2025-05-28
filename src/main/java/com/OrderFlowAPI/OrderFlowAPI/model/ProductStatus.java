@@ -19,12 +19,13 @@ public class ProductStatus {
     @Id
     @Column(name = "status_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int statusId;
+    private Integer statusId;
 
     @Column(name = "status_name", nullable = false, length = 30)
     private String name;
 
-    public ProductStatus(String name) {
+    public ProductStatus(Integer statusId, String name) {
+        this.statusId = statusId;
         this.name = name;
     }
 }

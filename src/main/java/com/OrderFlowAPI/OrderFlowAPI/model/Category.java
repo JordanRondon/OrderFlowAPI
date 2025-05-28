@@ -24,7 +24,7 @@ public class Category {
     @Id
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int categoryId;
+    private Integer categoryId;
 
     @Column(name = "category_name", nullable = false, length = 30)
     private String name;
@@ -32,7 +32,8 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
 
-    public Category(String name) {
+    public Category(Integer categoryId, String name) {
+        this.categoryId = categoryId;
         this.name = name;
     }
 }

@@ -47,6 +47,7 @@ public class AuthService implements IAuthService {
         RoleDto roleDto = iRoleService.findById(registerRequestDto.getRoleId());
 
         User user = new User(
+                null,
                 registerRequestDto.getFirstName(),
                 registerRequestDto.getLastName(),
                 registerRequestDto.getEmail(),

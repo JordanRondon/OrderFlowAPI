@@ -5,5 +5,5 @@ import java.io.Serializable;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public record OrderComboId(int orderId, int comboId) implements Serializable {
+public record OrderComboId(Integer orderId, Integer comboId) implements Serializable {
 }

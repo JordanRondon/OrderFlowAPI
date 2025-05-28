@@ -19,12 +19,13 @@ public class Role {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleId;
+    private Integer roleId;
 
     @Column(name = "role_name", nullable = false, length = 30)
     private String name;
 
-    public Role(String name) {
+    public Role(Integer roleId, String name) {
+        this.roleId = roleId;
         this.name = name;
     }
 }
