@@ -72,17 +72,15 @@ public class AuthServiceTest {
 
         loginRequestDto = new LoginRequestDto("juan.doe@gmail.com", "password123");
 
-        role = new Role();
-        role.setRoleId(1);
-        role.setName("admin");
+        role = new Role(1, "admin");
 
-        user = new User();
-        user.setUserId(1);
-        user.setEmail("juan.doe@gmail.com");
-        user.setPassword("encodedPassword");
-        user.setFirstName("Juan Hector");
-        user.setLastName("Doest Smeit");
-        user.setRole(role);
+        user = new User(
+                1,
+                "Juan Hector",
+                "Doest Smeit",
+                "juan.doe@gmail.com",
+                "encodedPassword",
+                role);
     }
 
     @Test
