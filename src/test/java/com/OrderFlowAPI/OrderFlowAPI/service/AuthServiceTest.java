@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.OrderFlowAPI.OrderFlowAPI.dto.RoleDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.UserDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.request.LoginRequestDto;
 import com.OrderFlowAPI.OrderFlowAPI.dto.request.RegisterRequestDto;
+import com.OrderFlowAPI.OrderFlowAPI.dto.response.LoginResponseDto;
 import com.OrderFlowAPI.OrderFlowAPI.exception.BusinessException;
 import com.OrderFlowAPI.OrderFlowAPI.exception.ErrorCode;
 import com.OrderFlowAPI.OrderFlowAPI.model.Role;
@@ -46,6 +51,10 @@ public class AuthServiceTest {
     private RegisterRequestDto registerRequestDto;
     private RoleDto roleDto;
 
+    private LoginRequestDto loginRequestDto;
+    private User user;
+    private Role role;
+
     @BeforeEach
     void setUp() {
         registerRequestDto = RegisterRequestDto.builder()
@@ -60,6 +69,20 @@ public class AuthServiceTest {
                 .roleId(1)
                 .name("admin")
                 .build();
+
+        loginRequestDto = new LoginRequestDto("juan.doe@gmail.com", "password123");
+
+        role = new Role();
+        role.setRoleId(1);
+        role.setName("admin");
+
+        user = new User();
+        user.setUserId(1);
+        user.setEmail("juan.doe@gmail.com");
+        user.setPassword("encodedPassword");
+        user.setFirstName("Juan Hector");
+        user.setLastName("Doest Smeit");
+        user.setRole(role);
     }
 
     @Test
@@ -113,5 +136,71 @@ public class AuthServiceTest {
 
         verify(iUserRepository, times(1)).existsByEmail(registerRequestDto.getEmail());
         verify(iUserRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    public void loginWithValidCredentials_returnsToken() {
+        // Given
+        when(iUserRepository.findByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("password123", user.getPassword())).thenReturn(true);
+        when(jwtUtil.generateJWT(any(UserDto.class))).thenReturn("mock.token");
+
+        // When
+        LoginResponseDto response = authService.login(loginRequestDto);
+
+        // Then
+        verify(iUserRepository, times(1)).findByEmail("juan.doe@gmail.com");
+        verify(passwordEncoder, times(1)).matches("password123", user.getPassword());
+        ArgumentCaptor<UserDto> userDtoCaptor = ArgumentCaptor.forClass(UserDto.class);
+        verify(jwtUtil, times(1)).generateJWT(userDtoCaptor.capture());
+        UserDto userDto = userDtoCaptor.getValue();
+        assertAll("userDto validation",
+                () -> assertEquals("Juan Hector", userDto.getFirstName()),
+                () -> assertEquals("Doest Smeit", userDto.getLastName()),
+                () -> assertEquals("juan.doe@gmail.com", userDto.getEmail()),
+                () -> {
+                    RoleDto roleDto = userDto.getRoleDto();
+                    assertAll("Role validation",
+                            () -> assertEquals(1, roleDto.getRoleId()),
+                            () -> assertEquals("admin", roleDto.getName()));
+                });
+        assertNotNull(response.getToken());
+    }
+
+    @Test
+    public void loginWithInvalidEmail_throwsException() {
+        // Given
+        when(iUserRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        // When
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            authService.login(new LoginRequestDto("invalid@email.com", "any"));
+        });
+
+        // then
+        verify(iUserRepository, times(1)).findByEmail(anyString());
+        assertAll("Exception Validation",
+                () -> assertEquals("unregistered email: invalid@email.com", exception.getMessage()),
+                () -> assertEquals(ErrorCode.AUTH_EMAIL_NOT_FOUND, exception.getErrorCode()),
+                () -> assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatus()));
+    }
+
+    @Test
+    public void oginWithInvalidPassword_throwsException() {
+        // Given
+        when(iUserRepository.findByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        // When
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            authService.login(new LoginRequestDto("juan.doe@gmail.com", "any"));
+        });
+
+        // Then
+        verify(iUserRepository, times(1)).findByEmail("juan.doe@gmail.com");
+        assertAll("Exception Validation",
+                () -> assertEquals("Incorrect password", exception.getMessage()),
+                () -> assertEquals(ErrorCode.AUTH_PASSWORD_MISMATCH, exception.getErrorCode()),
+                () -> assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatus()));
     }
 }
