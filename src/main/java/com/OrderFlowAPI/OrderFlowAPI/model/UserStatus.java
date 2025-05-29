@@ -12,17 +12,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "product_status")
-public class ProductStatus extends AbstractStatus {
+@Table(name = "users_status")
+public class UserStatus extends AbstractStatus {
     @Id
     @Column(name = "status_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer statusId;
 
-    public ProductStatus() {
+    public UserStatus() {
+        super();
     }
 
-    public ProductStatus(Integer statusId, String name) {
+    public UserStatus(Integer statusId, String name) {
         super(name);
         this.statusId = statusId;
     }
