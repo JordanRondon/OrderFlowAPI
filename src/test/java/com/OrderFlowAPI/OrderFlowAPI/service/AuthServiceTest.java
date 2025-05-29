@@ -26,6 +26,7 @@ import com.OrderFlowAPI.OrderFlowAPI.exception.BusinessException;
 import com.OrderFlowAPI.OrderFlowAPI.exception.ErrorCode;
 import com.OrderFlowAPI.OrderFlowAPI.model.Role;
 import com.OrderFlowAPI.OrderFlowAPI.model.User;
+import com.OrderFlowAPI.OrderFlowAPI.model.UserStatus;
 import com.OrderFlowAPI.OrderFlowAPI.repository.IUserRepository;
 import com.OrderFlowAPI.OrderFlowAPI.service.classes.AuthService;
 import com.OrderFlowAPI.OrderFlowAPI.service.classes.RoleService;
@@ -80,7 +81,8 @@ public class AuthServiceTest {
                 "Doest Smeit",
                 "juan.doe@gmail.com",
                 "encodedPassword",
-                role);
+                role,
+                new UserStatus(1, "enabled"));
     }
 
     @Test
