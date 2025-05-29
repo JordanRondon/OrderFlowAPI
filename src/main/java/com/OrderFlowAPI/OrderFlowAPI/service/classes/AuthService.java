@@ -52,7 +52,8 @@ public class AuthService implements IAuthService {
                 registerRequestDto.getLastName(),
                 registerRequestDto.getEmail(),
                 passwordEncoder.encode(registerRequestDto.getPassword()),
-                RoleMapper.toEntity(roleDto));
+                RoleMapper.toEntity(roleDto),
+                null); // The status is automatically added to the database
 
         iUserRepository.save(user);
     }

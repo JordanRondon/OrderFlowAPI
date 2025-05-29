@@ -11,11 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserDto {
-    private int userId;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private RoleDto roleDto;
-    private StatusDto statusDto;
+public class StatusDto {
+    private Integer statusId;
+    private String name;
 }

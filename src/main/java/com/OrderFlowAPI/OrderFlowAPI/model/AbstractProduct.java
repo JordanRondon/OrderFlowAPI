@@ -14,19 +14,19 @@ import lombok.Setter;
 @MappedSuperclass
 public abstract class AbstractProduct {
     @Column(name = "item_name", nullable = false, length = 30)
-    private String name;
+    protected String name;
 
     @Column(name = "price", nullable = false)
-    private double price;
+    protected double price;
 
     @Column(name = "number_of_requests", nullable = false)
-    private int numberOfRequests = 0;
+    protected int numberOfRequests = 0;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
-    private ProductStatus status;
+    protected ProductStatus status;
 
-    public AbstractProduct(String name, double price, ProductStatus status) {
+    protected AbstractProduct(String name, double price, ProductStatus status) {
         this.name = name;
         this.price = price;
         this.status = status;
