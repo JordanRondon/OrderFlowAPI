@@ -19,8 +19,11 @@ public enum ErrorCode {
     USER_NOT_FOUND("USER-001", "User not found"),
     USER_INACTIVE("USER-002", "Inactive user"),
 
+    // UserStatus errors
+    USERSTATUS_NOT_FOUND("USERSTATUS-001", "Status not found"),
+
     // Role errors
-    ROLE_NOT_FOUND("ROLE-001", "Role nor found");
+    ROLE_NOT_FOUND("ROLE-001", "Role not found");
 
     private final String code;
     private final String defaultMessage;
