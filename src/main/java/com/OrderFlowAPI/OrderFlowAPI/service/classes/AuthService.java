@@ -60,8 +60,9 @@ public class AuthService implements IAuthService {
 
     @Override
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        User user = iUserRepository.findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new BusinessException("unregistered email: " + loginRequestDto.getEmail(),
+        User user = iUserRepository.findActiveByEmail(loginRequestDto.getEmail())
+                .orElseThrow(() -> new BusinessException(
+                        "Email not registered or disabled: " + loginRequestDto.getEmail(),
                         ErrorCode.AUTH_EMAIL_NOT_FOUND,
                         HttpStatus.UNAUTHORIZED));
 
