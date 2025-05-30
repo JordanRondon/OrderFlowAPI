@@ -141,7 +141,7 @@ public class AuthServiceTest {
     @Test
     public void loginWithValidCredentials_returnsToken() {
         // Given
-        when(iUserRepository.findByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
+        when(iUserRepository.findActiveByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password123", user.getPassword())).thenReturn(true);
         when(jwtUtil.generateJWT(any(UserDto.class))).thenReturn("mock.token");
 
@@ -149,7 +149,7 @@ public class AuthServiceTest {
         LoginResponseDto response = authService.login(loginRequestDto);
 
         // Then
-        verify(iUserRepository, times(1)).findByEmail("juan.doe@gmail.com");
+        verify(iUserRepository, times(1)).findActiveByEmail("juan.doe@gmail.com");
         verify(passwordEncoder, times(1)).matches("password123", user.getPassword());
         ArgumentCaptor<UserDto> userDtoCaptor = ArgumentCaptor.forClass(UserDto.class);
         verify(jwtUtil, times(1)).generateJWT(userDtoCaptor.capture());
@@ -170,7 +170,7 @@ public class AuthServiceTest {
     @Test
     public void loginWithInvalidEmail_throwsException() {
         // Given
-        when(iUserRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(iUserRepository.findActiveByEmail(anyString())).thenReturn(Optional.empty());
 
         // When
         BusinessException exception = assertThrows(BusinessException.class, () -> {
@@ -178,17 +178,17 @@ public class AuthServiceTest {
         });
 
         // then
-        verify(iUserRepository, times(1)).findByEmail(anyString());
+        verify(iUserRepository, times(1)).findActiveByEmail(anyString());
         assertAll("Exception Validation",
-                () -> assertEquals("unregistered email: invalid@email.com", exception.getMessage()),
+                () -> assertEquals("Email not registered or disabled: invalid@email.com", exception.getMessage()),
                 () -> assertEquals(ErrorCode.AUTH_EMAIL_NOT_FOUND, exception.getErrorCode()),
                 () -> assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatus()));
     }
 
     @Test
-    public void oginWithInvalidPassword_throwsException() {
+    public void loginWithInvalidPassword_throwsException() {
         // Given
-        when(iUserRepository.findByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
+        when(iUserRepository.findActiveByEmail("juan.doe@gmail.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         // When
@@ -197,7 +197,7 @@ public class AuthServiceTest {
         });
 
         // Then
-        verify(iUserRepository, times(1)).findByEmail("juan.doe@gmail.com");
+        verify(iUserRepository, times(1)).findActiveByEmail("juan.doe@gmail.com");
         assertAll("Exception Validation",
                 () -> assertEquals("Incorrect password", exception.getMessage()),
                 () -> assertEquals(ErrorCode.AUTH_PASSWORD_MISMATCH, exception.getErrorCode()),
