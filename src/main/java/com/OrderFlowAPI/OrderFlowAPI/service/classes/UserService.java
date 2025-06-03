@@ -1,5 +1,7 @@
 package com.OrderFlowAPI.OrderFlowAPI.service.classes;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,21 @@ public class UserService implements IUserService {
                         ErrorCode.USER_NOT_FOUND,
                         HttpStatus.NOT_FOUND));
         return UserMapper.toDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = iUserRepository.findAll();
+
+        if (users.isEmpty()) {
+            throw new BusinessException("No users found",
+                    ErrorCode.USER_NOT_FOUND,
+                    HttpStatus.NOT_FOUND);
+        }
+
+        return users.stream()
+                .map(UserMapper::toDto)
+                .toList();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.OrderFlowAPI.OrderFlowAPI.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u JOIN FETCH u.status WHERE u.email = :email AND u.status.statusId = 1")
     public Optional<User> findActiveByEmail(@Param("email") String email);
+
+    @Query("SELECT u FROM User u ORDER BY u.userId ASC")
+    public List<User> findAll();
 }
