@@ -1,5 +1,7 @@
 package com.OrderFlowAPI.OrderFlowAPI.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,4 +36,10 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
+    @Operation(summary = "Get all users", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/list-all")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> usersDto = iUserService.getAllUsers();
+        return ResponseEntity.ok(usersDto);
+    }
 }
